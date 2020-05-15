@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: install geerlingguy postgres
+      command: ansible-galaxy install geerlingguy.postgresql
+
+    - name: install bertvv.samba
+      command: ansible-galaxy install bertvv.samba

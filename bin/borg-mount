@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source /data/devbox/files/config/borg-backup.env
+export BORG_PASSPHRASE
+
+sudo mkdir /mnt/borg
+sudo chown tlb:tlb /mnt/borg
+sudo -E borg --rsh "$RSH" mount -f $REPO /mnt/borg

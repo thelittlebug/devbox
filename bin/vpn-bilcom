@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/t/config/vpn_bilcom
+sudo openvpn fire-udp-1194-tlb.ovpn
+

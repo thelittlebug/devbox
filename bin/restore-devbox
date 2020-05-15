@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /data/devbox
+openssl enc -aes-256-cbc -pbkdf2 -d -in devbox.tar.gz.enc | tar xz

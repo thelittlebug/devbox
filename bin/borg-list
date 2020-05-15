@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source /data/devbox/files/config/borg-backup.env
+export BORG_PASSPHRASE
+
+if [ -z "$1" ]
+then
+    sudo -E borg --rsh "$RSH" list $REPO
+else
+    sudo -E borg --rsh "$RSH" list $REPO::$1
+fi

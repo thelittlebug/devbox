@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source /data/devbox/files/config/storagebox.env
+sshfs $STORAGEBOX_URL:./ ./storagebox -p 23

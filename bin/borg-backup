@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source /data/devbox/files/config/borg-backup.env
+export BORG_PASSPHRASE
+
+borg init -e authenticated-blake2 $REPO
+borg key export --paper $REPO
+borg break-lock $REPO
+
+sudo -E borg --rsh "$RSH" create $REPO::${BACKUP_NAME} \
+    /data \
+    -p \
+    --warning \
+    --stats \
+    --exclude-from /data/devbox/files/borg-excludes.txt \
+    --compression zstd,9
+
+#borg prune -v --list --keep-daily=7 --keep-weekly=4

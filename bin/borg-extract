@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source /data/devbox/files/config/borg-backup.env
+export BORG_PASSPHRASE
+
+sudo -E borg --rsh "$RSH" extract $REPO::$1 $2
