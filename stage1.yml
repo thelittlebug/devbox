@@ -1,6 +1,19 @@
 ---
 - hosts: all
+  vars_files:
+    - /data/devbox/files/config/vars.yml
+
   tasks:
+    - name: symlink dot dirs
+      command: "ln -sf {{ item }} /home/{{ username}}/"
+      with_lines:
+        - "find /data/devbox/files/ -type d -name '.*'"
+
+    - name: symlink dot files
+      command: "ln -sf {{ item }} /home/{{ username}}/"
+      with_lines:
+        - "find /data/devbox/files/ -type f -name '.*'"
+
     - name: install geerlingguy postgres
       command: ansible-galaxy install geerlingguy.postgresql
 

@@ -6,3 +6,4 @@ cd /data/devbox
 tar cz files/ | openssl enc -aes-256-cbc -pbkdf2 -e -pass env:DEVBOX_KEY > devbox.tar.gz.enc
 git add .
 git commit -m "backup devbox"
+git push
