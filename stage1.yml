@@ -1,21 +1,27 @@
 ---
 - hosts: all
-  vars_files:
-    - /data/devbox/files/config/vars.yml
-
+  become: true
   tasks:
-    - name: symlink dot dirs
-      command: "ln -sf {{ item }} /home/{{ username}}/"
-      with_lines:
-        - "find /data/devbox/files/ -type d -name '.*'"
+    - name: fstab data dir
+      lineinfile:
+        path: /etc/fstab
+        line: /dev/sdb1 /devbox btrfs nofail,noatime,compress-force=zstd:1
 
-    - name: symlink dot files
-      command: "ln -sf {{ item }} /home/{{ username}}/"
-      with_lines:
-        - "find /data/devbox/files/ -type f -name '.*'"
 
-    - name: install geerlingguy postgres
-      command: ansible-galaxy install geerlingguy.postgresql
+- hosts: all
+  vars_files:
+    - /devbox/files/config/vars.yml
+  tasks:
+    - name: symlink dot files 
+      command: "/devbox/bin/symlink /devbox/files /home/{{ username }}"
+      register: symlink
+      changed_when: "'symlinked' in symlink.stdout"
 
-    - name: install bertvv.samba
-      command: ansible-galaxy install bertvv.samba
+    - name: install galaxy packages
+      command: ansible-galaxy install {{ item }}
+      register: galaxy
+      changed_when: "'already installed' not in galaxy.stderr"
+      with_items:
+        - geerlingguy.postgresql
+        - bertvv.samba
+

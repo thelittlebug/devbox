@@ -2,7 +2,7 @@
 - hosts: all
   become: yes
   vars_files:
-    - /data/devbox/files/config/vars.yml
+    - /devbox/files/config/vars.yml
   tasks:
     - name: allow passwordless sudo
       lineinfile:
@@ -12,10 +12,10 @@
         line: '%sudo ALL=(ALL) NOPASSWD: ALL'
         validate: 'visudo -cf %s'
 
-    - name: add path /data/devbox/bin
+    - name: add path /devbox/bin
       lineinfile:
         path: "/home/{{ username}}/.bashrc"
-        line: export PATH=$PATH:/data/devbox/bin
+        line: export PATH=$PATH:/devbox/bin
 
     - name: update apt-get repo and cache
       apt:
@@ -33,6 +33,8 @@
           - nfs-kernel-server
           - python3
           - git
+          - virtualbox-guest-dkms
+          - virtualbox-guest-x11
 
 - hosts: all
   become: yes
@@ -47,9 +49,9 @@
     - role: geerlingguy.postgresql
 
 
-- hosts: all
-  become: yes
-  vars_files:
-    - /data/devbox/files/config/vars.yml
-  roles:
-    - role: bertvv.samba
+#- hosts: all
+#  become: yes
+#  vars_files:
+#    - /devbox/files/config/vars.yml
+#  roles:
+#    - role: bertvv.samba
