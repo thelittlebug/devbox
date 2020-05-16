@@ -1,0 +1,13 @@
+#!/bin/env python3
+import os
+import pathlib
+
+def linktmp(dest):
+  src = "/tmp" + dest
+  pathlib.Path(src).mkdir(parents=True, exist_ok=True)
+  if not os.path.islink(dest):
+    os.symlink(src, dest)
+
+linktmp('/devbox/work/one_to_rule_them_all/.dart_tool')
+linktmp('/devbox/work/one_to_rule_them_all/build')
+

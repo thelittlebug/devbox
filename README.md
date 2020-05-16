@@ -17,6 +17,7 @@ download: https://download.virtualbox.org/virtualbox/6.1.6/
         bridged
     network 2:
         host only, without dhcp
+        host addr: 192.168.251.1/24
         mac addr: 08:00:27:a1:a3:fc
 
 ## install xubuntu
@@ -39,7 +40,11 @@ add data.vdi to virtualbox
     sudo chown tlb:tlb /devbox
     sudo mount /dev/sdb1 /devbox
     cd /devbox
-    ./install
+
+before the 1st install the symlinks are not set. so you have to run
+    /devbox/bin/devbox-install
+
+after the 1st install you are able to devbox-install from everywhere
 
 ## path b: create new data partition
 create a new 256gb data partition in virtualbox

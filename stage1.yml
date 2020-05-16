@@ -1,12 +1,42 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - /devbox/files/config/vars.yml
   tasks:
     - name: fstab data dir
       lineinfile:
         path: /etc/fstab
         line: /dev/sdb1 /devbox btrfs nofail,noatime,compress-force=zstd:1
 
+    - name: configure internal network
+      copy:
+        src: /devbox/files/config/01-internal-network.yaml
+        dest: /etc/netplan/01-internal-network.yaml
+      register: network
+
+    - name: update internal network
+      command: netplan apply
+      when: network.changed
+
+    - name: symlink motd
+      file:
+        src: /devbox/bin/mymotd
+        dest: /etc/profile.d/mymotd
+        state: link
+
+    - name: symlink samba config
+      file:
+        src: /devbox/files/samba
+        dest: /etc/samba
+        state: link
+      register: samba
+
+    - name: autostart create project tmpfile symlinks
+      cron:
+        job: /devbox/bin/tmp-symlinks
+        special_time: reboot
+        user: "{{ username }}"
 
 - hosts: all
   vars_files:
@@ -23,5 +53,5 @@
       changed_when: "'already installed' not in galaxy.stderr"
       with_items:
         - geerlingguy.postgresql
-        - bertvv.samba
+        - gantsign.visual-studio-code
 

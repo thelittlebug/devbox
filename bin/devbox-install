@@ -1,5 +1,7 @@
 #!/bin/bash
 
 sudo apt install ansible
+cd /devbox
 ansible-playbook stage1.yml
 ansible-playbook stage2.yml
+
