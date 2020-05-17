@@ -1,5 +1,4 @@
 #!/bin/bash
 
-cd ~/t/config/vpn_bilcom
+cd /devbox/files/vpn/bilcom
 sudo openvpn fire-udp-1194-tlb.ovpn
-
