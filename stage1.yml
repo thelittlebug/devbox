@@ -19,24 +19,22 @@
       command: netplan apply
       when: network.changed
 
-    - name: symlink motd
-      file:
-        src: /devbox/bin/mymotd
-        dest: /etc/profile.d/mymotd
-        state: link
-
-    - name: symlink samba config
-      file:
-        src: /devbox/files/samba
-        dest: /etc/samba
-        state: link
-      register: samba
+    - name: symlink
+      include_tasks: symlink.yml
+      with_items:
+        - { src: /devbox/bin/mymotd, dest: /etc/profile.d/mymotd }
+        - { src: /devbox/files/samba, dest: /etc/samba }
 
     - name: autostart create project tmpfile symlinks
       cron:
         job: /devbox/bin/tmp-symlinks
         special_time: reboot
         user: "{{ username }}"
+
+    - name: wait for internet connection
+      wait_for:
+        host: 8.8.8.8
+        port: 53
 
 - hosts: all
   vars_files:

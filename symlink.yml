@@ -1,0 +1,19 @@
+---
+- name: symlink things
+  block:
+    - name: check if prepopulated
+      stat:
+        path: "{{ item.dest }}"
+      register: prepopulated
+    
+    - name: remove if prepopulated
+      file:
+        path: "{{ item.dest }}"
+        state: absent
+      when: prepopulated.stat.isdir is defined and prepopulated.stat.isdir
+    
+    - name: symlink
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link

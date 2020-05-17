@@ -17,7 +17,7 @@ for src in glob.glob(args.src + '/.*'):
     if os.path.isdir(dest):
         shutil.rmtree(dest, ignore_errors=True)
     if os.path.isfile(dest):
-        if not os.path.islink:
+        if not os.path.islink(dest):
             os.remove(dest)
     if not os.path.islink(dest):
         os.symlink(src, dest)
