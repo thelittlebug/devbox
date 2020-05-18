@@ -31,6 +31,7 @@
           - virtualbox-guest-dkms
           - virtualbox-guest-x11
           - openvpn
+          - openssh-server
 
 - hosts: all
   become: yes
@@ -69,7 +70,11 @@
       user:
         name: tlb
         shell: /usr/bin/zsh
-
+    - name: add authorized key
+      authorized_key:
+        user: tlb
+        state: present
+        key: "{{ lookup('file', '/devbox/files/.ssh/id_rsa.pub') }}"
 
 - hosts: all
   become: true
