@@ -52,4 +52,4 @@
       with_items:
         - geerlingguy.postgresql
         - gantsign.visual-studio-code
-
+        - m4rcu5nl.zerotier-one

@@ -1,0 +1,10 @@
+{
+    "search.exclude": {
+        "private/": true,
+        "work/": true
+    },
+    "files.exclude": {
+        "private/": true,
+        "work/": true
+    }
+}

@@ -26,12 +26,15 @@
     - name: install default packages
       apt:
         pkg:
+          - apt-transport-https
+          - curl
           - vim
           - mc
           - borgbackup
           - samba
           - nfs-kernel-server
           - python3
+          - python3-pip
           - git
           - virtualbox-guest-dkms
           - virtualbox-guest-x11
@@ -47,6 +50,9 @@
       - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
       - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
       - { type: host, database: all, user: all, address: '0.0.0.0/0', auth_method: md5 }
+  pre_tasks:
+    - pip:
+        name: psycopg2-binary
   roles:
     - role: geerlingguy.postgresql
 
@@ -84,9 +90,20 @@
 - hosts: all
   become: true
   pre_tasks:
-  - sysctl:
-      name: fs.inotify.max_user_watches
-      value: 524288
-      state: present    
+    - sysctl:
+        name: fs.inotify.max_user_watches
+        value: 524288
+        state: present
   roles:
     - role: gantsign.visual-studio-code
+
+- hosts: all
+  become: true
+  vars_files:
+    - /devbox/files/config/zerotier.yml
+  roles:
+      - role: m4rcu5nl.zerotier-one
+        zerotier_network_id: "{{ network_id }}"
+        zerotier_api_accesstoken: "{{ api_accesstoken }}"
+        zerotier_register_short_hostname: "{{ register_short_hostname }}"
+        zerotier_deb_release_repo: "{{ deb_release_repo }}"
